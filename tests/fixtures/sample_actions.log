@@ -1,0 +1,7 @@
+Run job: test
+Step: install dependencies
+ERROR: Failed to install package
+Traceback (most recent call last):
+  File "setup.py", line 10, in <module>
+    raise RuntimeError('install failed')
+RuntimeError: install failed

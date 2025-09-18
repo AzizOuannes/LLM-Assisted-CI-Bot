@@ -1,0 +1,12 @@
+name: LLM-Assisted CI Bot
+
+description: Reusable action that summarizes CI failures using a local LLM.
+
+inputs:
+  log-path:
+    description: 'Path to the Actions log file'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - run: python run_analyzer.py --log ${{ inputs.log-path }}
