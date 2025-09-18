@@ -2,30 +2,36 @@
 import argparse
 import json
 from parser_module import parse_actions_log
-from llm_adapter import summarize_with_llm
+from llm_adapter import get_llm_analysis
+from prompt_templates import detect_failure_type
 
 
 def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--log", required=True, help="Path to Actions log file")
-    p.add_argument("--model", default="phi-3-mini", help="LLM model name for adapter")
-    args = p.parse_args()
+    parser = argparse.ArgumentParser(description="Analyze GitHub Actions CI failures using LLM")
+    parser.add_argument("--log", required=True, help="Path to Actions log file")
+    parser.add_argument("--model", default="phi3:mini", help="LLM model name")
+    args = parser.parse_args()
 
+    # Read and parse the log file
     with open(args.log, "r", encoding="utf-8") as f:
-        log = f.read()
+        log_content = f.read()
 
-    parsed = parse_actions_log(log)
-    prompt = (
-        f"Analyze this CI failure log and produce a concise 1-line summary, two remediation bullets, and a small YAML patch suggestion.\n\nLog snippet:\n{parsed['snippet']}"
+    parsed_data = parse_actions_log(log_content)
+    failure_type = detect_failure_type(parsed_data['top_error'], parsed_data['snippet'])
+    
+    # Get LLM analysis with optimized prompt
+    context = f"Failure type: {failure_type}\nLog context: {parsed_data['snippet'][:200]}"
+    result = get_llm_analysis(
+        error_line=parsed_data['top_error'],
+        failure_context=context,
+        model=args.model
     )
-
-    response = summarize_with_llm(prompt, model=args.model)
-    out = {
-        "summary": response.get("summary", "(no summary)"),
-        "remediations": response.get("remediations", []),
-        "patch": response.get("patch", ""),
-    }
-    print(json.dumps(out, indent=2))
+    
+    # Add detected failure type to output
+    if isinstance(result, dict):
+        result["failure_type"] = failure_type
+    
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":

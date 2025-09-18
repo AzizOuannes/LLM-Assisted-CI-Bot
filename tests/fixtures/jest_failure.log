@@ -1,0 +1,22 @@
+2024-09-18T14:30:15.1234567Z ##[section]Starting: npm test
+2024-09-18T14:30:15.2345678Z npm info using npm@10.2.3
+2024-09-18T14:30:15.3456789Z npm info using node@v20.5.0
+2024-09-18T14:30:16.4567890Z 
+2024-09-18T14:30:16.5678901Z > my-app@1.0.0 test
+2024-09-18T14:30:16.6789012Z > jest
+2024-09-18T14:30:16.7890123Z 
+2024-09-18T14:30:18.8901234Z FAIL src/components/Button.test.js
+2024-09-18T14:30:18.9012345Z   ● Button component › should render with correct text
+2024-09-18T14:30:19.0123456Z 
+2024-09-18T14:30:19.1234567Z     expect(received).toBe(expected) // Object.is equality
+2024-09-18T14:30:19.2345678Z 
+2024-09-18T14:30:19.3456789Z     Expected: "Click me"
+2024-09-18T14:30:19.4567890Z     Received: "Click m"
+2024-09-18T14:30:19.5678901Z 
+2024-09-18T14:30:19.6789012Z       at Object.toBe (src/components/Button.test.js:12:25)
+2024-09-18T14:30:19.7890123Z 
+2024-09-18T14:30:19.8901234Z Test Suites: 1 failed, 0 passed, 1 total
+2024-09-18T14:30:19.9012345Z Tests:       1 failed, 0 passed, 1 total
+2024-09-18T14:30:20.0123456Z Snapshots:   0 total
+2024-09-18T14:30:20.1234567Z Time:        2.567 s
+2024-09-18T14:30:20.2345678Z ##[error]Process completed with exit code 1.
