@@ -9,13 +9,12 @@ An intelligent CI/CD failure analysis tool that uses local LLM models to automat
 - **Failure Type Detection**: Recognizes npm, Docker, Python, test failures, and more
 - **Actionable Remediations**: Provides specific steps to fix issues and prevent recurrence
 - **Workflow Optimization**: Generates GitHub Actions YAML patches for better CI performance
-- **16GB Optimized**: Enhanced performance with larger context windows and faster processing
+- **Fast & Accurate**: Optimized for quick analysis with high-quality results
 
 ## 📋 Prerequisites
 
 - **Python 3.8+**
 - **Ollama** (for local LLM inference)
-- **8GB+ RAM** (16GB recommended for optimal performance)
 
 ## 🛠️ Installation
 
@@ -50,23 +49,15 @@ python run_analyzer.py --log path/to/actions-log.txt --model phi3:mini
 ### Example Output
 ```json
 {
-  "summary": "The CI/CD pipeline failed during a test run due to an unspecified error that caused npm tests to fail.",
+  "summary": "React test failed due to TestingLibraryElementError - unable to find navigation element with text 'Home'",
   "remediations": [
-    "Fix the identified issue",
-    "Improve CI pipeline"
+    "Update Header.test.js to search for 'Homepage' instead of 'Home' text",
+    "Verify the Header component renders the correct navigation text"
   ],
-  "patch": "\nsteps:\n- name: Checkout code\n  uses: actions/checkout@v2\n- name: Setup Node.js and install dependencies\n  run: |\n    npm ci --cache .npm\n- name: Run tests with coverage report\n  run: |-\n    npm test -- --coverage",
+  "patch": "name: CI\non: [push]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - name: Setup Node.js\n        uses: actions/setup-node@v3\n        with:\n          node-version: '18'\n          cache: 'npm'\n      - run: npm ci\n      - run: npm test",
   "failure_type": "test_failure"
 }
 ```
-
-## ⚙️ Performance Optimizations
-
-This version is optimized for 16GB systems with:
-- **4096 token context window** (vs 2048 in basic version)
-- **8 CPU threads** for faster processing
-- **90-second timeout** for quicker responses
-- **Enhanced accuracy** with focused temperature settings
 
 ## 🔧 Configuration
 
@@ -81,11 +72,11 @@ The tool automatically detects different failure types:
 ```
 LLM-Assisted-CI-Bot/
 ├── run_analyzer.py          # Main CLI tool
-├── llm_adapter.py           # Ollama interface (16GB optimized)
+├── llm_adapter.py           # Ollama interface
 ├── parser_module.py         # Log parsing functionality
 ├── prompt_templates.py      # LLM prompts for analysis
 ├── requirements.txt         # Python dependencies
-├── tests/fixtures/          # Test log files
+├── tests/fixtures/          # Real test log files
 └── README.md               # This file
 ```
 {
@@ -115,39 +106,6 @@ LLM-Assisted-CI-Bot/
 
 ## ⚙️ Configuration
 
-### Model Options
-- **phi3:mini** (default): 2.2GB, good quality, ~30-60s on 8GB RAM
-- **qwen2:0.5b**: 352MB, faster but lower quality
-
-### Memory Optimization
-The tool is optimized for 8GB RAM systems with:
-- 2048 token context window
-- 5-minute timeout for analysis
-- Aggressive JSON parsing with fallbacks
-
-For 16GB+ systems, you can increase performance by modifying `llm_adapter.py`:
-```python
-"num_ctx": 4096,        # Larger context
-"timeout": 120          # Faster timeout
-```
-
-## 🔧 Supported Failure Types
-
-- **Test Failures**: Jest, pytest, unit test failures
-- **Dependency Issues**: npm, pip, package resolution
-- **Docker Build**: Container build and deployment issues
-- **Python Errors**: Import errors, module issues
-- **Infrastructure**: Timeout, network, resource constraints
-
-## 📊 Performance
-
-| System RAM | Model | Typical Response Time | Quality |
-|------------|-------|----------------------|---------|
-| 8GB | phi3:mini | 30-60 seconds | High |
-| 8GB | qwen2:0.5b | 2-5 seconds | Medium |
-| 16GB+ | phi3:mini | 10-20 seconds | High |
-| 16GB+ | llama3:8b | 15-30 seconds | Very High |
-
 ## 🧪 Testing
 
 Run the included test suite:
@@ -157,9 +115,10 @@ python3 -m pytest tests/
 
 Test with sample logs:
 ```bash
-python3 run_analyzer.py --log tests/fixtures/jest_failure.log
-python3 run_analyzer.py --log tests/fixtures/docker_build_failure.log
-python3 run_analyzer.py --log tests/fixtures/pytest_failure.log
+python3 run_analyzer.py --log tests/fixtures/react_test_failure.log
+python3 run_analyzer.py --log tests/fixtures/docker_npm_failure.log
+python3 run_analyzer.py --log tests/fixtures/python_pytest_failure.log
+python3 run_analyzer.py --log tests/fixtures/typescript_lint_failure.log
 ```
 
 ## 🤝 Contributing
