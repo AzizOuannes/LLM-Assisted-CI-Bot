@@ -1,0 +1,34 @@
+2025-09-19T10:15:23.4567890Z ##[group]Run npm test
+2025-09-19T10:15:23.5678901Z shell: /bin/bash -e {0}
+2025-09-19T10:15:23.6789012Z env:
+2025-09-19T10:15:23.7890123Z   CI: true
+2025-09-19T10:15:23.8901234Z ##[endgroup]
+2025-09-19T10:15:24.1234567Z 
+2025-09-19T10:15:24.2345678Z > react-app@0.1.0 test
+2025-09-19T10:15:24.3456789Z > react-scripts test --watchAll=false --coverage
+2025-09-19T10:15:24.4567890Z 
+2025-09-19T10:15:26.5678901Z FAIL src/components/Header.test.js
+2025-09-19T10:15:26.6789012Z   ● Header component › renders navigation links correctly
+2025-09-19T10:15:26.7890123Z 
+2025-09-19T10:15:26.8901234Z     TestingLibraryElementError: Unable to find an element with the text: Home
+2025-09-19T10:15:26.9012345Z 
+2025-09-19T10:15:27.0123456Z     Ignored nodes: comments, script, style
+2025-09-19T10:15:27.1234567Z     <body>
+2025-09-19T10:15:27.2345678Z       <div>
+2025-09-19T10:15:27.3456789Z         <nav>
+2025-09-19T10:15:27.4567890Z           <a href="/">Homepage</a>
+2025-09-19T10:15:27.5678901Z           <a href="/about">About</a>
+2025-09-19T10:15:27.6789012Z         </nav>
+2025-09-19T10:15:27.7890123Z       </div>
+2025-09-19T10:15:27.8901234Z     </body>
+2025-09-19T10:15:27.9012345Z 
+2025-09-19T10:15:28.0123456Z       at Object.getElementError (/home/runner/work/project/project/node_modules/@testing-library/dom/dist/config.js:37:19)
+2025-09-19T10:15:28.1234567Z       at /home/runner/work/project/project/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+2025-09-19T10:15:28.2345678Z       at Object.getByText (/home/runner/work/project/project/src/components/Header.test.js:12:25)
+2025-09-19T10:15:28.3456789Z 
+2025-09-19T10:15:28.4567890Z Test Suites: 1 failed, 2 passed, 3 total
+2025-09-19T10:15:28.5678901Z Tests:       1 failed, 8 passed, 9 total
+2025-09-19T10:15:28.6789012Z Snapshots:   0 total
+2025-09-19T10:15:28.7890123Z Time:        4.235 s
+2025-09-19T10:15:28.8901234Z Ran all test suites.
+2025-09-19T10:15:28.9012345Z ##[error]Process completed with exit code 1.

@@ -4,22 +4,26 @@ Prompt templates for CI failure analysis - optimized for speed.
 
 def get_analysis_prompt(error_line: str, failure_context: str) -> str:
     """Generate a detailed prompt for quality CI failure analysis."""
-    return f"""You are a DevOps expert analyzing a CI/CD failure. Provide a detailed analysis in JSON format.
+    return f"""Analyze this CI failure and respond with EXACTLY this JSON structure:
 
 ERROR: {error_line}
 CONTEXT: {failure_context}
 
-Analyze this CI failure and respond with valid JSON:
+RESPOND WITH ONLY VALID JSON IN THIS EXACT FORMAT:
 {{
-    "summary": "Clear description of what failed and why",
+    "summary": "one sentence explaining what failed",
     "remediations": [
-        "Specific action to fix this immediate issue",
-        "Preventive measure to avoid this in the future"
+        "specific command or action to fix this"
     ],
-    "patch": "GitHub Actions YAML snippet to improve the workflow"
+    "patch": "name: CI\\non: [push]\\njobs:\\n  test:\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v3"
 }}
 
-Focus on actionable solutions and include relevant caching, dependency management, or workflow optimizations in the patch."""
+RULES:
+1. Keep "summary" to ONE clear sentence
+2. "remediations" must be specific actionable commands
+3. "patch" must be valid YAML on single line with \\n for newlines
+4. NO nested objects, NO extra fields
+5. Focus on the specific error shown"""
 
 
 def detect_failure_type(error_line: str, log_snippet: str) -> str:

@@ -19,8 +19,8 @@ def main():
     parsed_data = parse_actions_log(log_content)
     failure_type = detect_failure_type(parsed_data['top_error'], parsed_data['snippet'])
     
-    # Get LLM analysis with optimized prompt
-    context = f"Failure type: {failure_type}\nLog context: {parsed_data['snippet'][:200]}"
+    # Get LLM analysis with optimized prompt - include more context for detailed analysis
+    context = f"Failure type: {failure_type}\nLog context: {parsed_data['snippet'][:1000]}"
     result = get_llm_analysis(
         error_line=parsed_data['top_error'],
         failure_context=context,

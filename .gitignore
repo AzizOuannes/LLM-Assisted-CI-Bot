@@ -40,3 +40,9 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# Debug and temporary files
+debug_*.py
+test_*.py
+*.tmp
+*.log.bak

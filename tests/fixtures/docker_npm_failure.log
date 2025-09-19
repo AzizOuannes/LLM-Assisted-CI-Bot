@@ -1,0 +1,25 @@
+2025-09-19T08:45:12.1234567Z ##[group]Run docker build -t myapp .
+2025-09-19T08:45:12.2345678Z shell: /bin/bash -e {0}
+2025-09-19T08:45:12.3456789Z ##[endgroup]
+2025-09-19T08:45:12.4567890Z Sending build context to Docker daemon  2.048kB
+2025-09-19T08:45:12.5678901Z Step 1/8 : FROM node:18-alpine
+2025-09-19T08:45:13.6789012Z  ---> 8ca4688f4f35
+2025-09-19T08:45:13.7890123Z Step 2/8 : WORKDIR /app
+2025-09-19T08:45:13.8901234Z  ---> Using cache
+2025-09-19T08:45:13.9012345Z  ---> 2b4a5c6d7e8f
+2025-09-19T08:45:14.0123456Z Step 3/8 : COPY package*.json ./
+2025-09-19T08:45:14.1234567Z  ---> a1b2c3d4e5f6
+2025-09-19T08:45:14.2345678Z Step 4/8 : RUN npm ci --only=production
+2025-09-19T08:45:14.3456789Z  ---> Running in 9f8e7d6c5b4a
+2025-09-19T08:45:16.4567890Z npm ERR! code ENOENT
+2025-09-19T08:45:16.5678901Z npm ERR! syscall open
+2025-09-19T08:45:16.6789012Z npm ERR! path /app/package-lock.json
+2025-09-19T08:45:16.7890123Z npm ERR! errno -2
+2025-09-19T08:45:16.8901234Z npm ERR! enoent ENOENT: no such file or directory, open '/app/package-lock.json'
+2025-09-19T08:45:16.9012345Z npm ERR! enoent This is related to npm not being able to find a file.
+2025-09-19T08:45:17.0123456Z npm ERR! enoent 
+2025-09-19T08:45:17.1234567Z 
+2025-09-19T08:45:17.2345678Z npm ERR! A complete log of this run can be found in:
+2025-09-19T08:45:17.3456789Z npm ERR!     /root/.npm/_logs/2025-09-19T08_45_16_234Z-debug-0.log
+2025-09-19T08:45:17.4567890Z The command '/bin/sh -c npm ci --only=production' returned a non-zero code: 254
+2025-09-19T08:45:17.5678901Z ##[error]Process completed with exit code 1.

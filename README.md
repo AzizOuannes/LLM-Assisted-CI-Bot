@@ -9,26 +9,27 @@ An intelligent CI/CD failure analysis tool that uses local LLM models to automat
 - **Failure Type Detection**: Recognizes npm, Docker, Python, test failures, and more
 - **Actionable Remediations**: Provides specific steps to fix issues and prevent recurrence
 - **Workflow Optimization**: Generates GitHub Actions YAML patches for better CI performance
-- **Memory Optimized**: Configured to work efficiently on 8GB RAM systems
+- **16GB Optimized**: Enhanced performance with larger context windows and faster processing
 
 ## 📋 Prerequisites
 
 - **Python 3.8+**
 - **Ollama** (for local LLM inference)
-- **8GB+ RAM** (16GB recommended for better performance)
+- **8GB+ RAM** (16GB recommended for optimal performance)
 
 ## 🛠️ Installation
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
-   cd "LLM Assisted CI Bot"
+   git clone https://github.com/AzizOuannes/LLM-Assisted-CI-Bot.git
+   cd LLM-Assisted-CI-Bot
    ```
 
 2. **Set up Python environment**:
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   python -m venv .venv
+   .venv\Scripts\activate  # Windows
+   # source .venv/bin/activate  # Linux/Mac
    pip install -r requirements.txt
    ```
 
@@ -43,11 +44,50 @@ An intelligent CI/CD failure analysis tool that uses local LLM models to automat
 
 ### Basic Analysis
 ```bash
-python3 run_analyzer.py --log path/to/actions-log.txt --model phi3:mini
+python run_analyzer.py --log path/to/actions-log.txt --model phi3:mini
 ```
 
 ### Example Output
 ```json
+{
+  "summary": "The CI/CD pipeline failed during a test run due to an unspecified error that caused npm tests to fail.",
+  "remediations": [
+    "Fix the identified issue",
+    "Improve CI pipeline"
+  ],
+  "patch": "\nsteps:\n- name: Checkout code\n  uses: actions/checkout@v2\n- name: Setup Node.js and install dependencies\n  run: |\n    npm ci --cache .npm\n- name: Run tests with coverage report\n  run: |-\n    npm test -- --coverage",
+  "failure_type": "test_failure"
+}
+```
+
+## ⚙️ Performance Optimizations
+
+This version is optimized for 16GB systems with:
+- **4096 token context window** (vs 2048 in basic version)
+- **8 CPU threads** for faster processing
+- **90-second timeout** for quicker responses
+- **Enhanced accuracy** with focused temperature settings
+
+## 🔧 Configuration
+
+The tool automatically detects different failure types:
+- **Test failures** (Jest, pytest, JUnit)
+- **Build failures** (npm, webpack, Docker)
+- **Dependency issues** (package installation, conflicts)
+- **Infrastructure problems** (timeouts, resource limits)
+
+## 📁 Project Structure
+
+```
+LLM-Assisted-CI-Bot/
+├── run_analyzer.py          # Main CLI tool
+├── llm_adapter.py           # Ollama interface (16GB optimized)
+├── parser_module.py         # Log parsing functionality
+├── prompt_templates.py      # LLM prompts for analysis
+├── requirements.txt         # Python dependencies
+├── tests/fixtures/          # Test log files
+└── README.md               # This file
+```
 {
   "summary": "The CI pipeline failed during 'npm test' due to missing test dependencies",
   "remediations": [

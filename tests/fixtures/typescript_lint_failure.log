@@ -1,0 +1,20 @@
+2025-09-19T11:30:45.1234567Z ##[group]Run npm run lint
+2025-09-19T11:30:45.2345678Z shell: /bin/bash -e {0}
+2025-09-19T11:30:45.3456789Z ##[endgroup]
+2025-09-19T11:30:45.4567890Z 
+2025-09-19T11:30:45.5678901Z > typescript-project@1.0.0 lint
+2025-09-19T11:30:45.6789012Z > eslint src/**/*.ts --max-warnings 0
+2025-09-19T11:30:45.7890123Z 
+2025-09-19T11:30:47.8901234Z /home/runner/work/project/project/src/components/UserProfile.ts
+2025-09-19T11:30:47.9012345Z   15:7   error  'userData' is assigned a value but never used  no-unused-vars
+2025-09-19T11:30:48.0123456Z   23:12  error  Missing return type on function               @typescript-eslint/explicit-function-return-type
+2025-09-19T11:30:48.1234567Z   34:25  error  Prefer nullish coalescing operator (`??`)     @typescript-eslint/prefer-nullish-coalescing
+2025-09-19T11:30:48.2345678Z   45:1   error  Expected 'this' to be used by class method   @typescript-eslint/class-methods-use-this
+2025-09-19T11:30:48.3456789Z 
+2025-09-19T11:30:48.4567890Z /home/runner/work/project/project/src/utils/api.ts
+2025-09-19T11:30:48.5678901Z   12:7   error  'response' is defined but never used          no-unused-vars
+2025-09-19T11:30:48.6789012Z   28:15  error  Unsafe assignment of an `any` value          @typescript-eslint/no-unsafe-assignment
+2025-09-19T11:30:48.7890123Z 
+2025-09-19T11:30:48.8901234Z ✖ 6 problems (6 errors, 0 warnings)
+2025-09-19T11:30:48.9012345Z 
+2025-09-19T11:30:49.0123456Z ##[error]Process completed with exit code 1.

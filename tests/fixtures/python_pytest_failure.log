@@ -1,0 +1,41 @@
+2025-09-19T09:20:34.1234567Z ##[group]Run python -m pytest tests/ -v
+2025-09-19T09:20:34.2345678Z shell: /bin/bash -e {0}
+2025-09-19T09:20:34.3456789Z env:
+2025-09-19T09:20:34.4567890Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.5/x64
+2025-09-19T09:20:34.5678901Z ##[endgroup]
+2025-09-19T09:20:35.6789012Z ========================= test session starts ==========================
+2025-09-19T09:20:35.7890123Z platform linux -- Python 3.11.5, pytest-7.4.2, pluggy-1.3.0 -- /opt/hostedtoolcache/Python/3.11.5/x64/bin/python
+2025-09-19T09:20:35.8901234Z cachedir: .pytest_cache
+2025-09-19T09:20:35.9012345Z rootdir: /home/runner/work/myproject/myproject
+2025-09-19T09:20:36.0123456Z plugins: cov-4.0.0, mock-3.11.1
+2025-09-19T09:20:36.1234567Z collecting ... collected 15 items
+2025-09-19T09:20:36.2345678Z 
+2025-09-19T09:20:36.3456789Z tests/test_api.py::test_user_registration_validation PASSED    [  6%]
+2025-09-19T09:20:36.4567890Z tests/test_api.py::test_user_login_success PASSED              [ 13%]
+2025-09-19T09:20:36.5678901Z tests/test_api.py::test_invalid_email_format FAILED            [ 20%]
+2025-09-19T09:20:36.6789012Z tests/test_database.py::test_connection_timeout PASSED         [ 26%]
+2025-09-19T09:20:36.7890123Z tests/test_utils.py::test_password_hashing FAILED              [ 33%]
+2025-09-19T09:20:36.8901234Z 
+2025-09-19T09:20:36.9012345Z =================================== FAILURES ====================================
+2025-09-19T09:20:37.0123456Z _______________________ test_invalid_email_format ________________________
+2025-09-19T09:20:37.1234567Z 
+2025-09-19T09:20:37.2345678Z     def test_invalid_email_format():
+2025-09-19T09:20:37.3456789Z         with pytest.raises(ValidationError):
+2025-09-19T09:20:37.4567890Z >           validate_email("invalid-email")
+2025-09-19T09:20:37.5678901Z E           AssertionError: ValidationError not raised
+2025-09-19T09:20:37.6789012Z 
+2025-09-19T09:20:37.7890123Z tests/test_api.py:45: AssertionError
+2025-09-19T09:20:37.8901234Z _________________________ test_password_hashing __________________________
+2025-09-19T09:20:37.9012345Z 
+2025-09-19T09:20:38.0123456Z     def test_password_hashing():
+2025-09-19T09:20:38.1234567Z         password = "test123"
+2025-09-19T09:20:38.2345678Z         hashed = hash_password(password)
+2025-09-19T09:20:38.3456789Z >       assert verify_password(password, hashed) == True
+2025-09-19T09:20:38.4567890Z E       assert False == True
+2025-09-19T09:20:38.5678901Z 
+2025-09-19T09:20:38.6789012Z tests/test_utils.py:23: AssertionError
+2025-09-19T09:20:38.7890123Z ========================= short test summary info ============================
+2025-09-19T09:20:38.8901234Z FAILED tests/test_api.py::test_invalid_email_format - AssertionError: ValidationError not raised
+2025-09-19T09:20:38.9012345Z FAILED tests/test_utils.py::test_password_hashing - assert False == True
+2025-09-19T09:20:39.0123456Z ========================= 2 failed, 13 passed in 3.45s =========================
+2025-09-19T09:20:39.1234567Z ##[error]Process completed with exit code 1.

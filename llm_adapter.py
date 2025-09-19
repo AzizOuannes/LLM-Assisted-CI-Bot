@@ -7,34 +7,73 @@ OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 
 
 def summarize_with_llm(prompt: str, model: str = "phi3:mini"):
-    """Call local Ollama API with optimized settings for 8GB RAM."""
+    """Call local Ollama API with optimized settings for 16GB RAM (enhanced performance)."""
     try:
-        # Optimized for quality on 8GB RAM - patient settings
+        
         resp = requests.post(f"{OLLAMA_URL}/api/generate", json={
             "model": model,
             "prompt": prompt,
             "stream": False,
             "options": {
-                "num_ctx": 2048,        # Reasonable context for good analysis
-                "temperature": 0.2,     # Slightly creative but focused
-                "top_p": 0.8,          # Good token diversity
-                "num_predict": 300,    # Allow longer, better responses
-                "num_thread": 4        # Use more CPU threads (adjust if needed)
+                "num_ctx": 4096,        
+                "temperature": 0.1,     # More focused for CI analysis
+                "top_p": 0.9,          # Better token diversity
+                "num_predict": 800,    # Increased from 400 for complete responses
+                "num_thread": 8        # More threads for 16GB systems
             }
-        }, timeout=300)  # 5 minutes timeout - patient for quality
+        }, timeout=90)  
         
         resp.raise_for_status()
         data = resp.json()
         text = data.get("response", "").strip()
 
-        # More aggressive JSON cleaning for smaller models
-        cleaned_text = text.replace("```json", "").replace("```", "").replace("\\n", "\n").strip()
+       
+        cleaned_text = text.replace("```json", "").replace("```", "").strip()
+        
+        # Remove any leading/trailing text that's not JSON
+        start_idx = cleaned_text.find("{")
+        end_idx = cleaned_text.rfind("}") + 1
+        if start_idx >= 0 and end_idx > start_idx:
+            cleaned_text = cleaned_text[start_idx:end_idx]
         
         # Try multiple JSON extraction strategies
         try:
-            # Strategy 1: Direct parsing
-            if cleaned_text.startswith("{") and cleaned_text.endswith("}"):
-                return json.loads(cleaned_text)
+            # Strategy 1: Direct parsing of cleaned text
+            return json.loads(cleaned_text)
+        except:
+            pass
+            
+        try:
+            # Strategy 2: Fix common JSON issues with multiline strings
+            import re
+            # Handle multiline patch field by finding the content between quotes
+            # This pattern handles the patch field that spans multiple lines
+            
+            # First, let's find where the patch field starts and ends
+            patch_start = cleaned_text.find('"patch": "')
+            if patch_start >= 0:
+                content_start = patch_start + len('"patch": "')
+                # Find the closing quote, accounting for escaped quotes
+                quote_pos = content_start
+                while quote_pos < len(cleaned_text):
+                    quote_pos = cleaned_text.find('"', quote_pos)
+                    if quote_pos == -1:
+                        break
+                    # Check if this quote is escaped
+                    if quote_pos > 0 and cleaned_text[quote_pos - 1] != '\\':
+                        # Found the closing quote
+                        patch_content = cleaned_text[content_start:quote_pos]
+                        # Escape the newlines and other control characters
+                        escaped_content = patch_content.replace('\\', '\\\\').replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
+                        # Replace the patch content in the text
+                        fixed_text = cleaned_text[:content_start] + escaped_content + cleaned_text[quote_pos:]
+                        result = json.loads(fixed_text)
+                        
+                        # Convert the escaped newlines back to actual newlines in patch field
+                        if "patch" in result and isinstance(result["patch"], str):
+                            result["patch"] = result["patch"].replace("\\n", "\n")
+                        return result
+                    quote_pos += 1
         except:
             pass
             
@@ -71,7 +110,7 @@ def summarize_with_llm(prompt: str, model: str = "phi3:mini"):
         
     except requests.exceptions.Timeout:
         return {
-            "summary": "LLM analysis timed out after 5 minutes - the model may be struggling with memory constraints",
+            "summary": "LLM analysis timed out after 90 seconds - try a smaller context or check system resources",
             "remediations": ["Try freeing up system memory", "Consider restarting Ollama service"],
             "patch": ""
         }
